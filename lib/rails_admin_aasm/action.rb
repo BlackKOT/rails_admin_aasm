@@ -42,7 +42,12 @@ module RailsAdmin
             else
               flash[:error] = I18n.t('admin.state_machine.no_id')
             end
-            redirect_back(fallback_location: index_path)
+            if @authorization_adapter.authorized?(@object.state, @abstract_model, @object)
+              redirect_back(fallback_location: index_path)
+            else
+              redirect_to :index
+            end
+            
           end
         end
 
